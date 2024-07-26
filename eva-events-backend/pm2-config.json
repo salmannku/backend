@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "eva-events-backend",
+      "script": "npm",
+      "args": "start"
+    }
+  ]
+}

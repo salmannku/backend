@@ -1,0 +1,216 @@
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" lang="en">
+
+<head>
+  <link rel="preload" as="image" href="https://api.evaevents.com/images/eva-events-logo-linear.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet" />
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<style>
+  li {
+    font-size: 14px;
+
+    color: #181818;
+  }
+</style>
+<div style="
+      display: none;
+      overflow: hidden;
+      
+      opacity: 0;
+      max-height: 0;
+      max-width: 0;
+    "></div>
+
+<body style="
+      background-color: #fbfbfb;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    ">
+  <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="
+        max-width: 37.5em;
+        border-radius: 4px;
+        border: 1px solid #eaeaea;
+        padding: 40px;
+        padding-top: 30px;
+        width: 100%;
+        max-width: 650px;
+        background: #ffffff;
+      ">
+    <tbody>
+      <tr style="width: 100%">
+        <td>
+          <div>
+            <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation">
+              <tbody>
+                <tr>
+                  <td>
+                    <img alt="eva events logo" src="{event_logo_url}" style="
+                        display: block;
+                        outline: none;
+                        border: none;
+                        text-decoration: none;
+                        margin: 0 auto;
+                        width: 100%;
+                        max-height: 68px;
+                        max-width: 165px;
+                        margin-bottom: 60px;
+                        object-fit: contain;
+                      " />
+
+                    <div>
+                      <p style="
+                            font-size: 14px;
+                            
+                            font-weight: 800;
+                            text-align: center;
+                            color: #181818;
+                          ">
+                        {event_title}
+                      </p>
+                    </div>
+                    <img alt="eva events logo" src="{event_poster_url}" style="
+                          display: block;
+                          margin: 0 auto;
+                          width: 100%;
+                          margin: 5px;
+                          height: 150px;
+                          object-fit: cover;
+                        " />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h1 style="
+                  margin-top: 40px;
+                  font-weight: 400;
+                  text-align: center;
+                  color: #111;
+                  font-size: 24px;
+                ">
+              You’re invited!
+            </h1>
+          </div>
+
+          <div style="width: 100%">
+            <p style="
+                  font-size: 14px;
+                  
+                  margin: 26px 0;
+                  color: #181818;
+                ">
+              Dear {username}
+            </p>
+            <p style="font-size: 14px;  color: #181818">
+              You have been invited to the
+              <span style="font-size: 14px; font-weight: bold; color: #181818">
+                {event_title}
+              </span>
+            </p>
+            <p style="font-size: 14px;  color: #181818">
+              event which will be held on
+              <span style="font-size: 14px; font-weight: bold; color: #181818">
+                {event_date}
+              </span>
+            </p>
+
+            {static_body_content}
+
+            <div style="margin-top: 30px; font-size: 14px; color: #181818">
+              <p style="margin: 0px">
+                User ID:
+                <span style="font-weight: 700">{login_email}</span>
+              </p>
+              <p style="margin: 0px">
+                Password:
+                <span style="font-weight: 700">{login_password}</span>
+              </p>
+            </div>
+          </div>
+
+          <div style="
+                color: #000000;
+                text-decoration: none;
+                margin-top: 30px;
+                width: 100%;
+                text-align: center;
+              ">
+            <a href="{login_to_event_link}" style="
+                    background-color: #4e4e4e;
+                    text-align: center;
+                    font-size: 13.33px;
+                    text-decoration: none;
+                    font-family: 'Google Sans', Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+    				padding: 13px 10px;
+                    border: 1px solid #eaeaea;
+                    color: #ffffff;
+                    border-radius: 6px;
+                    margin: 0px auto;
+                    display:block;
+                    cursor: pointer;
+                  ">
+              		Login and Explore
+            </a>
+          </div>
+
+          <div style="width: 100%; margin-top: 30px">
+            <p style="font-size: 14px;  color: #181818">
+              We look forward to engaging with you online and in person at the
+              event!
+            </p>
+          </div>
+
+          <div style="width: 100%; margin-top: 15px">
+            <p style="font-size: 14px; color: #181818; margin: 0">
+              Kind Regards,
+            </p>
+            <p style="font-size: 14px; color: #181818; margin: 0">
+              Events Team
+            </p>
+          </div>
+
+          <div>
+            <img alt="eva events logo" src="https://api.evaevents.com/images/eva-events-logo-linear.png" style="
+                  display: block;
+                  margin: 0 auto;
+                  width: 70.82px;
+                  height: 18.72px;
+                  margin-top: 30px;
+                  object-fit: contain;
+                " />
+          </div>
+
+          <div>
+            <p style="
+                  font-size: 10px;
+                  
+                  margin-top: 30px;
+                  color: #a3a3a3;
+                ">
+              You were sent this invitation as you were previously an attendee
+              or associated with a company at one of our past events. If you
+              do not wish to receive notifications then
+              <a href="" style="color: #a3a3a3; text-decoration: underline" target="_blank">please click here to
+                unsubscribe</a>
+              and we will remove you from our database.
+            </p>
+          </div>
+          <div>
+            <p style="font-size: 10px;  color: #a3a3a3">
+              EVA CRM is a subsidiary of Eva International Media Ltd. Based in
+              England and Wales. Register Company No. 2323023. For more
+              information, visit
+              <a href="" style="color: #a3a3a3; text-decoration: underline" target="_blank">www.evacrm.com/about</a>
+            </p>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>

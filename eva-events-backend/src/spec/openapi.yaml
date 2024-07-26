@@ -1,0 +1,1811 @@
+openapi: 3.0.3
+info:
+  title: Mylo API
+  description: |
+    Mylo API Documentation
+  version: 0.0.1
+
+servers:
+  - url: https://dev.api.mylo.global/api
+    description: Development API
+
+tags:
+  - name: categories
+    description: Category Management
+
+  - name: expert profile
+    description: Expert Profile Management
+
+  - name: expert qualifications
+    description: Expert Qualifications Management
+
+  - name: expert work experience
+    description: Expert Work Experience Management
+
+  - name: expert publications
+    description: Publications APIs
+
+  - name: institute
+    description: Institute Data
+
+  - name: company
+    description: Company Data
+
+paths:
+  /expert/profile:
+    get:
+      tags:
+        - expert profile
+      operationId: Expert-GetOwnProfile
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Get logged in expert's profile
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    $ref: '#/components/schemas/FullExpertProfile'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/name:
+    put:
+      tags:
+        - expert profile
+      operationId: Expert-UpdateName
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Update expert name
+      requestBody:
+        description: Update name
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ first_name, last_name ]
+              properties:
+                first_name:
+                  type: string
+                  example: John
+                last_name:
+                  type: string
+                  example: Doe
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ first_name, last_name ]
+                    properties:
+                      first_name:
+                        type: string
+                        example: John
+                      last_name:
+                        type: string
+                        example: Doe
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/summary:
+    put:
+      tags:
+        - expert profile
+      operationId: Expert-UpdateSummary
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Update expert summary
+      requestBody:
+        description: Update summary
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ summary ]
+              properties:
+                summary:
+                  type: string
+                  example: New summary to be updated
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      summary:
+                        type: string
+                        example: Expert's current Summary
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/tags:
+    post:
+      tags:
+        - expert profile
+      operationId: Expert-UpdateTags
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Update expert tags
+      requestBody:
+        description: Update tags
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ tags ]
+              properties:
+                tags:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/ObjectId"
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/FullCategory"
+
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/display-picture:
+    post:
+      tags:
+        - expert profile
+      operationId: Expert-AddAvatar
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Add expert display picture
+      requestBody:
+        description: Update display picture
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    enum:
+                      - null
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    put:
+      tags:
+        - expert profile
+      operationId: Expert-UpdateAvatar
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Update expert display picture
+      requestBody:
+        description: Update display picture
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ policy ]
+              properties:
+                policy:
+                  type: string
+                  enum:
+                    - public
+                    - private
+                    - none
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      policy:
+                        type: string
+                        example: public
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /export/profile/brief:
+    put:
+      tags:
+        - expert profile
+      operationId: Expert-UpdateBrief
+      security: [ { expertBearerAuth: [ ] } ]
+      summary: Update expert profile brief
+      requestBody:
+        description: Update brief
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ brief ]
+              properties:
+                brief:
+                  allOf:
+                    - $ref: '#/components/schemas/ExpertProfileBrief'
+                  required: [ profile_title_format ]
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      brief:
+                        description: Expert's current brief
+                        allOf:
+                          - $ref: '#/components/schemas/ExpertProfileBrief'
+                        required: [ profile_title_format ]
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/qualification:
+    post:
+      tags:
+        - expert qualifications
+      summary: Add Qualification
+      description: |
+        - Expert field need not be filled. Will be ignored.
+        - Institute can be an Institute ID if institute already exists, otherwise can be a new institute with required fields name and country.
+      operationId: Expert-AddQualification
+      security: [ { expertBearerAuth: [ ] } ]
+      requestBody:
+        $ref: '#/components/requestBodies/Qualification'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      qualification:
+                        $ref: '#/components/schemas/PopulatedQualification'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/qualifications:
+    get:
+      tags:
+        - expert qualifications
+      summary: Get All Qualifications
+      description: |
+        Utility method to get list of all expert's qualifications in one call.
+      operationId: Expert-GetQualifications
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'qualifications' ]
+                    properties:
+                      qualifications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PopulatedQualification'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/qualification/{qID}:
+    get:
+      tags:
+        - expert qualifications
+      operationId: Expert-GetQualification
+      summary: Get Qualification
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/QualificationId'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      qualification:
+                        $ref: '#/components/schemas/PopulatedQualification'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    put:
+      tags:
+        - expert qualifications
+      operationId: Expert-EditQualification
+      summary: Edit Qualification
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/QualificationId'
+      requestBody:
+        $ref: '#/components/requestBodies/Qualification'
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      qualification:
+                        $ref: '#/components/schemas/PopulatedQualification'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    delete:
+      tags:
+        - expert qualifications
+      operationId: Expert-DeleteQualification
+      summary: Delete Qualification
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/QualificationId'
+
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    enum: [ null ]
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/work-experience:
+    post:
+      tags:
+        - expert work experience
+      operationId: Expert-AddWorkExperience
+      summary: Add Work Experience
+      description: |
+        - Expert field need not be filled. Will be ignored.
+        - Company can be a Company ID if company already exists, otherwise can be a new company with required fields name and country.
+      security: [ { expertBearerAuth: [ ] } ]
+      requestBody:
+        $ref: '#/components/requestBodies/WorkExperience'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      work_experience:
+                        $ref: '#/components/schemas/PopulatedWorkExperience'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/work-experiences:
+    get:
+      tags:
+        - expert work experience
+      summary: Get All Work Experiences
+      description: |
+        Utility method to get list of all expert's work experiences in one call.
+      operationId: Expert-GetWorkExperiences
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'work_experience' ]
+                    properties:
+                      work_experience:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/PopulatedWorkExperience'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/profile/work-experience/{weID}:
+    get:
+      tags:
+        - expert work experience
+      operationId: Expert-GetWorkExperience
+      summary: Get Work Experience
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/WorkExperienceId'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      work_experience:
+                        $ref: '#/components/schemas/PopulatedWorkExperience'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    put:
+      tags:
+        - expert work experience
+      operationId: Expert-EditWorkExperience
+      summary: Edit Work Experience
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/WorkExperienceId'
+      requestBody:
+        $ref: '#/components/requestBodies/WorkExperience'
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      work_experience:
+                        $ref: '#/components/schemas/PopulatedWorkExperience'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    delete:
+      tags:
+        - expert work experience
+      operationId: Expert-DeleteWorkExperience
+      summary: Delete Work Experience
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/WorkExperienceId'
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    enum: [ null ]
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/publications/drafts:
+    get:
+      tags:
+        - expert publications
+      operationId: Expert-GetPublicationsDrafts
+      summary: Get list of expert's draft publications
+      description: |
+        Returns a list of expert's draft publications.
+        An expert can have at most 5 draft publications.
+        Includes Content.
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'publications' ]
+                    properties:
+                      publications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RawPublication'
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/publications/list:
+    get:
+      tags:
+        - expert publications
+      operationId: Expert-GetPublicationsList
+      summary: Get list of expert's publications
+      description: |
+        Returns a list of expert publications.
+        Does not include draft publications.
+        
+        Does not include content.
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        #        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/PageSizeQuery'
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'publications' ]
+                    properties:
+                      count:
+                        type: number
+                        description: Total number of publications
+                      publications:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RawPublication'
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/publications/article:
+    post:
+      tags:
+        - expert publications
+      operationId: Expert-CreatePublicationArticle
+      summary: Create a new article
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'publication' ]
+                    properties:
+                      publication:
+                        $ref: '#/components/schemas/RawPublication'
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/publications/article/{pID}/publish:
+    post:
+      tags:
+        - expert publications
+      operationId: Expert-PublishPublicationArticle
+      summary: Publish a draft article
+      parameters:
+        - $ref: '#/components/parameters/PublicationId'
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    enum:
+                      - null
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+  
+  /expert/publications/article/{pID}/visibility:
+    post:
+      tags:
+        - expert publications
+      operationId: Expert-SetVisibilityPublicationArticle
+      summary: Publish a draft article
+      parameters:
+        - $ref: '#/components/parameters/PublicationId'
+      security: [ { expertBearerAuth: [ ] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - private
+                    - public
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                          - private
+                          - public
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /expert/publications/article/{pID}:
+    get:
+      tags:
+        - expert publications
+      operationId: Expert-GetPublicationArticle
+      summary: Get article
+      description: |
+        Returns the full article (with content if it exists).
+      parameters:
+        - $ref: '#/components/parameters/PublicationId'
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'publication' ]
+                    properties:
+                      publication:
+                        $ref: '#/components/schemas/RawPublication'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    put:
+      tags:
+        - expert publications
+      operationId: Expert-EditPublicationArticle
+      summary: Updates article
+      description: |
+        At least one parameter (title, content, summary, or thumbnail) needs to be provided.  
+        Multiple can be provided. Fields that are not provided will not be altered.  
+        Will update the given fields. Will return entire article (publication).  
+        
+        Should be used as required by the frontend.
+      parameters:
+        - $ref: '#/components/parameters/PublicationId'
+      security: [ { expertBearerAuth: [ ] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                thumbnail:
+                  type: string
+                title:
+                  type: string
+                content:
+                  type: string
+                summary:
+                  type: string
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    required: [ 'publication' ]
+                    properties:
+                      publication:
+                        $ref: '#/components/schemas/RawPublication'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    patch:
+      tags:
+        - expert publications
+      operationId: Expert-PatchPublicationArticle
+      summary: Patches an article (auto-save)
+      description: |
+        Applies a batch of JSONDiffPatch patches to the content.  
+        Client should only request one API call at a time.  
+        Next batch of updates should be resent after receiving a success response only.
+        
+        Also accepts a title string for title updates.
+      parameters:
+        - $ref: '#/components/parameters/PublicationId'
+      security: [ { expertBearerAuth: [ ] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                patch:
+                  type: object
+
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    enum:
+                      - null
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    delete:
+      tags:
+        - expert publications
+      operationId: Expert-DeletePublicationArticle
+      summary: Delete article
+      parameters:
+        - $ref: '#/components/parameters/PublicationId'
+      security: [ { expertBearerAuth: [ ] } ]
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    enum: [ null ]
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /institute/search:
+    get:
+      tags:
+        - institute
+      operationId: Institute-Search
+      summary: Get list of institutes
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/PageSizeQuery'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      institutes:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Institute'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /company/search:
+    get:
+      tags:
+        - company
+      operationId: Company-Search
+      summary: Get list of companies
+      security: [ { expertBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/PageQuery'
+        - $ref: '#/components/parameters/PageSizeQuery'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      companies:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Company'
+
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/new:
+    post:
+      tags:
+        - categories
+      operationId: Category-AddCategory
+      summary: Add Category
+      security: [ { adminBearerAuth: [ ] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseCategory'
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/new-tag:
+    post:
+      tags:
+        - categories
+      operationId: Category-AddTag
+      summary: Add Tag
+      security: [ { expertBearerAuth: [ ] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseTag'
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tag:
+                        $ref: "#/components/schemas/FullTag"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/attach-tag:
+    post:
+      tags:
+        - categories
+      operationId: Category-AttachTag
+      summary: Attach Tag
+      security: [ { adminBearerAuth: [ ] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                data:
+                  type: object
+                  required: [ 'value', 'parent' ]
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    parent:
+                      type: string
+
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/value/${category}:
+    get:
+      tags:
+        - categories
+      operationId: Category-GetCategory
+      summary: Get Category
+      security: [ { sharedBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/Category'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    put:
+      tags:
+        - categories
+      operationId: Category-EditCategory
+      summary: Edit Category
+      security: [ { adminBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/Category'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                parent:
+                  type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      category:
+                        $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+    delete:
+      tags:
+        - categories
+      operationId: Category-DeleteCategory
+      summary: Delete Category
+      security: [ { adminBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/Category'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: string
+                    enum:
+                      - null
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/children/${category}:
+    get:
+      tags:
+        - categories
+      operationId: Category-GetCategoryChildren
+      summary: Get Category's children
+      security: [ { sharedBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/Category'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      children:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/descendants/${category}:
+    get:
+      tags:
+        - categories
+      operationId: Category-GetCategoryDescendants
+      summary: Get Category's Descendants
+      security: [ { sharedBearerAuth: [ ] } ]
+      parameters:
+        - $ref: '#/components/parameters/Category'
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      descendants:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+  /category/search/tag/${value}:
+    get:
+      tags:
+        - categories
+      operationId: Category-GetCategoryDescendants
+      summary: Get Category's Descendants
+      security: [ { sharedBearerAuth: [ ] } ]
+      parameters:
+        - name: value
+          in: path
+          description: Search Term
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/FullCategory"
+        default:
+          $ref: '#/components/responses/UnknownError'
+
+components:
+  securitySchemes:
+    sharedBearerAuth:
+      description: Any Auth Token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    adminBearerAuth:
+      description: Admin Auth Token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    expertBearerAuth:
+      description: Expert Auth Token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  requestBodies:
+    Qualification:
+      description: Qualification
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ 'qualification' ]
+            properties:
+              qualification:
+                allOf:
+                  - $ref: '#/components/schemas/BaseQualification'
+                properties:
+                  institute:
+                    anyOf:
+                      - $ref: "#/components/schemas/ObjectId"
+                      - $ref: "#/components/schemas/Institute"
+
+    WorkExperience:
+      description: Work Experience
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [ 'work_experience' ]
+            properties:
+              work_experience:
+                allOf:
+                  - $ref: '#/components/schemas/BaseWorkExperience'
+                properties:
+                  company:
+                    anyOf:
+                      - $ref: "#/components/schemas/ObjectId"
+                      - $ref: '#/components/schemas/Company'
+
+  parameters:
+    SearchQuery:
+      name: search
+      in: query
+      description: Search Query
+      required: false
+      schema:
+        type: string
+
+    PageSizeQuery:
+      name: pageSize
+      in: query
+      description: Page Size
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+
+    PageQuery:
+      name: page
+      in: query
+      description: Page Number
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    QualificationId:
+      name: qID
+      in: path
+      description: Qualification ID
+      required: true
+      schema:
+        $ref: "#/components/schemas/ObjectId"
+
+    PublicationId:
+      name: pID
+      in: path
+      description: Article ID
+      required: true
+      schema:
+        $ref: "#/components/schemas/ObjectId"
+
+    WorkExperienceId:
+      name: weID
+      in: path
+      description: WorkExperience ID
+      required: true
+      schema:
+        $ref: "#/components/schemas/ObjectId"
+
+    Category:
+      name: category
+      in: path
+      description: Category
+      required: true
+      schema:
+        type: string
+
+  responses:
+    UnknownError:
+      description: error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+
+
+    Unauthorized:
+      description: Unauthorized Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorSchema'
+
+  schemas:
+    ObjectId:
+      type: string
+      format: objectid
+      pattern: '^[0-9a-fA-F]{24}$'
+
+    # response helper schema
+    SuccessResponse:
+      type: object
+      required: [ success, data ]
+      properties:
+        success:
+          type: boolean
+          enum: [ true ]
+        message:
+          type: string
+
+    ErrorSchema:
+      type: object
+      required: [ success, error, code ]
+      properties:
+        success:
+          type: boolean
+          enum: [ false ]
+        data:
+          enum: [ null ]
+        error:
+          type: string
+          nullable: false
+        message:
+          type: string
+        code:
+          type: string
+
+    # data schema
+    ExpertProfileBrief:
+      type: object
+      required: [ profile_title_format ]
+      properties:
+        qualification_title:
+          type: string
+          example: B.Tech
+        qualification_area:
+          type: string
+          example: Computer Science
+        university_name:
+          type: string
+          example: Oxford University
+        university_location:
+          type: string
+          example: Oxford, UK
+        job_title:
+          type: string
+          example: General Manager
+        workplace_name:
+          type: string
+          example: Apple Inc.
+        workplace_location:
+          type: string
+          example: California, United States
+        expertise_area:
+          type: string
+          example: Theoretical Physics
+        profession:
+          type: string
+          example: Scientist
+        years_of_experience:
+          type: string
+          example: 6
+        free_form:
+          type: string
+          example: Professional Particle Physicist
+
+        profile_title_format:
+          type: array
+          items:
+            type: string
+            enum:
+              - qualification_title
+              - qualification_area
+              - university_name
+              - university_location
+              - job_title
+              - workplace_name
+              - workplace_location
+              - expertise_area
+              - profession
+              - years_of_experience
+              - free_form
+          example: [ 'qualification_title', 'university_name', 'university_location' ]
+
+    ExpertProfileLayout:
+      description: Page layout of an expert profile, in order
+      type: array
+      maxLength: 3
+      uniqueItems: true
+      items:
+        type: string
+        enum: [ 'summary', 'qualifications', 'work_experience' ]
+
+    BaseExpert:
+      type: object
+      required: [ first_name ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+
+        first_name:
+          description: First Name
+          type: string
+          example: John
+
+        last_name:
+          description: Last Name
+          type: string
+          example: Doe
+
+        categories:
+          description: Category IDs
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/ObjectId"
+
+        brief:
+          $ref: '#/components/schemas/ExpertProfileBrief'
+
+    BaseExpertProfile:
+      type: object
+      required: [ first_name, brief ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+
+        avatar:
+          description: Avatar
+          type: string
+          enum:
+            - none
+            - public
+            - private
+
+        avatar_url:
+          type: string
+
+        first_name:
+          description: First Name
+          type: string
+          example: John
+
+        last_name:
+          description: Last Name
+          type: string
+          example: Doe
+
+        categories:
+          description: Category IDs
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/ObjectId"
+
+        brief:
+          $ref: '#/components/schemas/ExpertProfileBrief'
+
+    FullExpertProfile:
+      allOf:
+        - $ref: '#/components/schemas/BaseExpertProfile'
+      type: object
+      properties:
+        date_of_birth:
+          description: Date of Birth
+          type: string
+          format: date-time
+
+        summary:
+          description: Opening Paragraph text content
+          type: string
+
+        work_experience:
+          description: Work experience IDs (not sorted)
+          type: array
+          items:
+            $ref: "#/components/schemas/ObjectId"
+
+        qualifications:
+          description: Qualification IDs (not sorted)
+          type: array
+          items:
+            $ref: "#/components/schemas/ObjectId"
+
+        profile_layout:
+          allOf:
+            - $ref: "#/components/schemas/ExpertProfileLayout"
+
+    Institute:
+      type: object
+      required: [ name, country ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+        name:
+          type: string
+          example: University of Arizona
+        country:
+          type: string
+          example: US
+
+    BaseQualification:
+      type: object
+      required: [ from, to, institute ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+        expert:
+          $ref: "#/components/schemas/ObjectId"
+        from:
+          type: string
+          format: date-time
+        to:
+          type: string
+          format: date-time
+          nullable: true
+
+        description:
+          type: string
+          example: Hons. with minor in design
+        title:
+          type: string
+          example: B.Tech
+        area_of_study:
+          type: string
+          example: Computer Science
+
+    RawQualification:
+      allOf:
+        - $ref: '#/components/schemas/BaseQualification'
+      properties:
+        institute:
+          $ref: "#/components/schemas/ObjectId"
+
+    PopulatedQualification:
+      allOf:
+        - $ref: '#/components/schemas/BaseQualification'
+      properties:
+        institute:
+          $ref: '#/components/schemas/Institute'
+
+    Company:
+      type: object
+      required: [ name ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+        name:
+          type: string
+          example: Apple Inc.
+        country:
+          type: string
+          example: US
+
+    BaseWorkExperience:
+      type: object
+      required: [ from, country, to, company, title ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+        expert:
+          $ref: "#/components/schemas/ObjectId"
+        from:
+          type: string
+          format: date-time
+        to:
+          type: string
+          format: date-time
+          nullable: true
+        country:
+          type: string
+          example: IN
+        description:
+          type: string
+          example: Founding Member
+        title:
+          type: string
+          example: CEO
+
+    RawWorkExperience:
+      allOf:
+        - $ref: '#/components/schemas/BaseWorkExperience'
+      properties:
+        company:
+          $ref: "#/components/schemas/ObjectId"
+
+    PopulatedWorkExperience:
+      allOf:
+        - $ref: '#/components/schemas/BaseWorkExperience'
+      properties:
+        company:
+          $ref: '#/components/schemas/Company'
+
+    BasePublication:
+      type: object
+      required: [ 'status', 'type' ]
+      properties:
+        _id:
+          $ref: "#/components/schemas/ObjectId"
+        title:
+          type: string
+          example: 'How to write a good article'
+        thumbnail:
+          type: string
+          example: 'https://www.storage.com/thumbnail.png'
+        summary:
+          type: string
+          example: 'The best article on how to write a good article.'
+        type:
+          type: string
+          enum:
+            - article
+        status:
+          type: string
+          enum:
+            - draft
+            - private
+            - public
+        content:
+          type: string
+          example: '<lexical root obj JSON>'
+        revision_time:
+          type: string
+          format: date-time
+        publication_time:
+          type: string
+          format: date-time
+        views:
+          type: number
+
+    RawPublication:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/BasePublication'
+      properties:
+        author:
+          $ref: "#/components/schemas/ObjectId"
+
+    PopulatedPublication:
+      type: object
+      required: [ 'author' ]
+      allOf:
+        - $ref: '#/components/schemas/BasePublication'
+      properties:
+        author:
+          $ref: '#/components/schemas/BaseExpert'
+
+    BaseCategory:
+      type: object
+      required: [ 'name', 'value', 'parent' ]
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        parent:
+          type: string
+
+    BaseTag:
+      type: object
+      required: [ 'name', 'value' ]
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+
+    FullCategory:
+      type: object
+      required: [ 'name', 'value', 'parent', 'ancestors' ]
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        parent:
+          type: string
+        is_tag:
+          type: boolean
+        ancestors:
+          type: array
+          items:
+            type: string
+
+    FullTag:
+      type: object
+      required: [ 'name', 'value', 'is_tag' ]
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+        parent:
+          type: string
+        is_tag:
+          type: boolean
+          enum:
+            - true
+        ancestors:
+          type: array
+          items:
+            type: string
+
+    PatchRequest:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/JSONPatchRequestAddReplaceTest'
+          - $ref: '#/components/schemas/JSONPatchRequestRemove'
+          - $ref: '#/components/schemas/JSONPatchRequestMoveCopy'
+
+    JSONPatchRequestAddReplaceTest:
+      type: object
+      additionalProperties: false
+      required:
+        - value
+        - op
+        - path
+      properties:
+        path:
+          description: A JSON Pointer path.
+          type: string
+        value:
+          description: The value to add, replace or test.
+        op:
+          description: The operation to perform.
+          type: string
+          enum:
+            - add
+            - replace
+            - test
+    JSONPatchRequestRemove:
+      type: object
+      additionalProperties: false
+      required:
+        - op
+        - path
+      properties:
+        path:
+          description: A JSON Pointer path.
+          type: string
+        op:
+          description: The operation to perform.
+          type: string
+          enum:
+            - remove
+    JSONPatchRequestMoveCopy:
+      type: object
+      additionalProperties: false
+      required:
+        - from
+        - op
+        - path
+      properties:
+        path:
+          description: A JSON Pointer path.
+          type: string
+        op:
+          description: The operation to perform.
+          type: string
+          enum:
+            - move
+            - copy

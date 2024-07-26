@@ -1,0 +1,26 @@
+{
+    "42812d81-649a-40c4-b9da-d0037e9613c6": {
+        "type": "SMS_SENT_ERROR",
+        "error": {
+            "response": {
+                "messages": [
+                    {
+                        "status": "2",
+                        "error-text": "Missing from param",
+                        "errorText": "Missing from param"
+                    }
+                ],
+                "message-count": "1",
+                "messageCount": "1"
+            }
+        },
+        "message": "Sms sent failed to ",
+        "error_id": "42812d81-649a-40c4-b9da-d0037e9613c6",
+        "metadata": {
+            "message": "Sending sms to phone number",
+            "to": "",
+            "text": ""
+        },
+        "created_at": "2023-12-21T17:24:10.968Z"
+    }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "_id": {
+      "$oid": "653baeec35ab6175f3671452"
+    },
+    "type": "NEW_USERS",
+    "amount": 2,
+    "description": ""
+  },
+  {
+    "_id": {
+      "$oid": "653baf3035ab6175f3671453"
+    },
+    "type": "WEEKLY_RENEWAL",
+    "amount": 2,
+    "description": ""
+  },
+  {
+    "_id": {
+      "$oid": "653bd9723e0c3c3fe5297adf"
+    },
+    "type": "USER_REFERRALS",
+    "amount": 1,
+    "description": ""
+  }
+]
